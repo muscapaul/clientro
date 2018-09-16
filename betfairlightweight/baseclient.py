@@ -20,7 +20,7 @@ class BaseClient(object):
             lambda: 'https://identitysso.betfair.com/api/',
             spain='https://identitysso.betfair.es/api/',
             italy='https://identitysso.betfair.it/api/',
-            romania='https://idenititysso.betfair.ro',
+            romania='https://idenititysso.betfair.ro/api/',
             w_con='https://identitysso.w-con.betfair.com',
             europe='https://identitysso.betfaironline.eu',
     )
@@ -83,6 +83,8 @@ class BaseClient(object):
         if self.password is None:
             if os.environ.get(self.username+'password'):
                 self.password = os.environ.get(self.username+'password')
+                print("Pasword is:")
+                print(self.password)
             else:
                 raise PasswordError(self.username)
 
@@ -125,10 +127,11 @@ class BaseClient(object):
         if self.cert_files is not None:
             return self.cert_files
 
-        certs = self.certs or '/certs/'
+        certs = self.certs or '/home/ctech/certs/'
         ssl_path = os.path.join(os.pardir, certs)
         try:
             cert_path = os.listdir(ssl_path)
+            print(cert_path)
         except FileNotFoundError:
             raise CertsError(certs)
         except OSError:   # Python 2 compatability
@@ -155,6 +158,8 @@ class BaseClient(object):
 
     @property
     def keep_alive_headers(self):
+        print("Session token: ")
+        print(self.session_token)
         return {
             'Accept': 'application/json',
             'X-Application': self.app_key,

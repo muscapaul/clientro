@@ -35,7 +35,12 @@ class Logout(BaseEndpoint):
         session = session or self.client.session
         date_time_sent = datetime.datetime.utcnow()
         try:
-            response = session.post(self.url, headers=self.client.keep_alive_headers)
+            print("**********************************")
+            print("url damn...")
+            print(self.url)
+            print("********************************")
+            print(self.client.keep_alive_headers)
+            response = session.post('https://identitysso.betfair.ro/api/logout', headers=self.client.keep_alive_headers)
         except ConnectionError:
             raise APIError(None, exception='ConnectionError')
         except Exception as e:

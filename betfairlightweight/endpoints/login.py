@@ -27,6 +27,8 @@ class Login(BaseEndpoint):
 
         :rtype: LoginResource
         """
+        print("Attempting to login.....")
+
         (response, elapsed_time) = self.request(self.url, session=session)
         self.client.set_session_token(response.get('sessionToken'))
         return self.process_response(response, LoginResource, elapsed_time, lightweight)
@@ -35,10 +37,12 @@ class Login(BaseEndpoint):
         session = session or self.client.session
         date_time_sent = datetime.datetime.utcnow()
         try:
-            response = session.post(self.url, data=self.data, headers=self.client.login_headers, cert=self.client.cert)
+            response = session.post('https://identitysso.betfair.ro/api/certlogin', data=self.data, headers=self.client.login_headers, 
+                    cert=('/home/ctech/certs/client-2048.crt', '/home/ctech/certs/client-2048.key'))
         except ConnectionError:
             raise APIError(None, exception='ConnectionError')
         except Exception as e:
+            print(e)
             raise APIError(None, exception=e)
         elapsed_time = (datetime.datetime.utcnow() - date_time_sent).total_seconds()
 
